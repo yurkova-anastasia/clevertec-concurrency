@@ -34,9 +34,8 @@ public class Client {
     }
 
 
-    public void sendRequest() throws ExecutionException, InterruptedException {
+    public void sendRequest(Server server) throws ExecutionException, InterruptedException {
         final Random random = new Random();
-        Server server = new Server();
 
         List<CompletableFuture<Response>> futures = IntStream.range(0, data.size())
                 .mapToObj(this::createRequest)
@@ -52,9 +51,6 @@ public class Client {
 
         CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
         combinedFuture.get();
-
-//        Метод allOf предоставляет способ ждать завершения всех переданных CompletableFuture в массиве.
-//        Затем, вызывая allOf.get(), вы блокируете текущий поток до тех пор, пока все эти CompletableFuture не завершатся.
 
         executorService.shutdown();
     }
